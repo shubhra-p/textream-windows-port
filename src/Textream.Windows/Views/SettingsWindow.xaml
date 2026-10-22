@@ -1,0 +1,278 @@
+<Window x:Class="Textream.Windows.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Textream Settings"
+        Width="640" Height="580"
+        WindowStartupLocation="CenterOwner"
+        Background="#18181C"
+        Foreground="#FFFFFF"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="#99FFFFFF"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder" BorderThickness="0,0,0,2" BorderBrush="Transparent" Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#0A84FF"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E0FFFFFF"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,8"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="SectionHeader">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#0A84FF"/>
+            <Setter Property="Margin" Value="0,16,0,8"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="Label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#DDFFFFFF"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Preferences" FontSize="20" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <!-- Tabs -->
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+
+            <!-- General Tab -->
+            <TabItem Header="General">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="SYSTEM &amp; DISPLAY BEHAVIOR" Style="{StaticResource SectionHeader}"/>
+                        <CheckBox x:Name="KeepAwakeCheck" Content="Prevent screen &amp; system sleep while reading"/>
+                        <CheckBox x:Name="HideScreenShareCheck" Content="Hide prompter overlay from screen recordings &amp; calls (OBS/Zoom)"/>
+                        <CheckBox x:Name="ShowReadBadgeCheck" Content="Show green badges on completed script pages"/>
+
+                        <TextBlock Text="PAGINATION" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Auto-Next Page Delay:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="AutoNextDelayCombo" Grid.Column="1" Width="140" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Immediate (0s)" Tag="0"/>
+                                <ComboBoxItem Content="1 second" Tag="1"/>
+                                <ComboBoxItem Content="3 seconds" Tag="3"/>
+                                <ComboBoxItem Content="5 seconds" Tag="5"/>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Prompter Tab -->
+            <TabItem Header="Prompter">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="OVERLAY MODE" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Window Display Mode:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="OverlayModeCombo" Grid.Column="1" Width="160" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Top-Pinned Notch" Tag="Pinned"/>
+                                <ComboBoxItem Content="Floating Draggable" Tag="Floating"/>
+                                <ComboBoxItem Content="Fullscreen" Tag="Fullscreen"/>
+                            </ComboBox>
+                        </Grid>
+
+                        <CheckBox x:Name="FollowCursorCheck" Content="Follow mouse cursor when undocked (with click-through)"/>
+
+                        <TextBlock Text="DIMENSIONS &amp; OPACITY" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Prompter Width:" Style="{StaticResource Label}"/>
+                            <Slider x:Name="WidthSlider" Grid.Column="1" Minimum="280" Maximum="1000" Value="640" TickFrequency="20" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="WidthValueText" Grid.Column="2" Text="{Binding Value, ElementName=WidthSlider, StringFormat='{}{0}px'}"
+                                       Foreground="#99FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Text Area Height:" Style="{StaticResource Label}"/>
+                            <Slider x:Name="HeightSlider" Grid.Column="1" Minimum="100" Maximum="500" Value="140" TickFrequency="10" IsSnapToTickEnabled="True"/>
+                            <TextBlock x:Name="HeightValueText" Grid.Column="2" Text="{Binding Value, ElementName=HeightSlider, StringFormat='{}{0}px'}"
+                                       Foreground="#99FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Overlay Opacity:" Style="{StaticResource Label}"/>
+                            <Slider x:Name="OpacitySlider" Grid.Column="1" Minimum="0.2" Maximum="1.0" Value="0.95" SmallChange="0.05"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Value, ElementName=OpacitySlider, StringFormat='{}{0:P0}'}"
+                                       Foreground="#99FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <TextBlock Text="TYPOGRAPHY" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Font Size:" Style="{StaticResource Label}"/>
+                            <Slider x:Name="FontSizeSlider" Grid.Column="1" Minimum="14" Maximum="36" Value="20" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Value, ElementName=FontSizeSlider, StringFormat='{}{0}pt'}"
+                                       Foreground="#99FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Active Word Position:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="ReadingPosCombo" Grid.Column="1" Width="140" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Centered" Tag="Centered"/>
+                                <ComboBoxItem Content="Top Line" Tag="Top"/>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Speech & Audio Tab -->
+            <TabItem Header="Speech &amp; Audio">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="TRACKING MODE" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Listening Mode:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="ListeningModeCombo" Grid.Column="1" Width="180" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Word Tracking (Speech)" Tag="WordTracking"/>
+                                <ComboBoxItem Content="Silence-Paused (VAD)" Tag="SilencePaused"/>
+                                <ComboBoxItem Content="Classic (Constant Scroll)" Tag="Classic"/>
+                            </ComboBox>
+                        </Grid>
+
+                        <TextBlock Text="SCROLL SPEED" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="65"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Reading Speed:" Style="{StaticResource Label}"/>
+                            <Slider x:Name="SpeedSlider" Grid.Column="1" Minimum="50" Maximum="300" Value="150" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Value, ElementName=SpeedSlider, StringFormat='{}{0} WPM'}"
+                                       Foreground="#99FFFFFF" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Remote Tab -->
+            <TabItem Header="Remote">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="EMBEDDED SERVERS" Style="{StaticResource SectionHeader}"/>
+                        <CheckBox x:Name="BrowserServerCheck" Content="Enable Web Prompter Server (Port 7373 / WS 7374)"/>
+                        <TextBlock Text="View live teleprompter from any browser on local network: http://localhost:7373"
+                                   Foreground="#77FFFFFF" FontSize="11" Margin="24,-4,0,12"/>
+
+                        <CheckBox x:Name="DirectorServerCheck" Content="Enable Remote Director Console (Port 7575 / WS 7576)"/>
+                        <TextBlock Text="Control and live-edit script remotely via secure token: http://localhost:7575"
+                                   Foreground="#77FFFFFF" FontSize="11" Margin="24,-4,0,12"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Displays Tab -->
+            <TabItem Header="Displays">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="EXTERNAL PROJECTION &amp; MIRRORING" Style="{StaticResource SectionHeader}"/>
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="External Display Output:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="ExternalModeCombo" Grid.Column="1" Width="160" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Disabled (Off)" Tag="Off"/>
+                                <ComboBoxItem Content="Mirror Inverted" Tag="Mirror"/>
+                                <ComboBoxItem Content="Normal Fullscreen" Tag="Display"/>
+                            </ComboBox>
+                        </Grid>
+
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Beam-Splitter Mirror Axis:" Style="{StaticResource Label}"/>
+                            <ComboBox x:Name="MirrorAxisCombo" Grid.Column="1" Width="160" HorizontalAlignment="Left"
+                                      Background="#24242A" Foreground="White" BorderBrush="#44FFFFFF">
+                                <ComboBoxItem Content="Horizontal Flip" Tag="Horizontal"/>
+                                <ComboBoxItem Content="Vertical Flip" Tag="Vertical"/>
+                                <ComboBoxItem Content="Both Axes" Tag="Both"/>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <!-- Save Button -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Save &amp; Close" Width="120" Height="34"
+                    Background="#0A84FF" Foreground="White" FontWeight="SemiBold"
+                    BorderThickness="0" Cursor="Hand" Click="OnSaveClick"/>
+        </StackPanel>
+    </Grid>
+</Window>
